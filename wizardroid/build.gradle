@@ -12,10 +12,16 @@ android {
         versionCode project.ext.versionCode
         versionName version
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+    }
 }
 
 dependencies {
     compile 'com.android.support:support-v4:22.0.0'
+    compile 'org.springframework.android:spring-android-rest-template:2.0.0.M1'
+    compile 'commons-validator:commons-validator:1.4.0'
 }
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
@@ -30,56 +36,58 @@ uploadArchives {
 	configuration = configurations.archives
 
     repositories {
+
+
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                if (hasCredentials) {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-            }
+            /*********************************************************************
+             *
+             * we are deploying to a local file then commiting to a svn repository
+             * @ see http://andydyer.org/blog/2014/10/05/hosting-android-dependencies-on-github/
+             *
+             * Note you need a gradle.properties files with 
+             *
+             * */
 
-            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                if (hasCredentials) {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-            }
-            
+            def deployPath = file(getProperty('aar.deployPath'))
+            repository(url: "file://${deployPath.absolutePath}")
+
 			pom.project {
 				name 'WizarDroid'
 				description 'Lightweight Android library for creating step by step wizards'
-				url 'http://wizardroid.codepond.org'
+				url 'http://wizardroid.softvelopment.com'
 
 				scm {
-					url 'http://www.github.com/nimrodda/wizardroid'
-					connection 'scm:git://github.com/Nimrodda/WizarDroid.git'
-					developerConnection 'scm:git://github.com/Nimrodda/WizarDroid.git'
+					url 'http://www.github.com/softvelopment/wizardroid'
+					connection 'scm:git://github.com/softvelopment/WizarDroid.git'
+					developerConnection 'scm:git://github.com/softvelopment/WizarDroid.git'
 				}
 
 				licenses {
 					license {
 						name 'The MIT License (MIT)'
-						url 'https://raw.github.com/Nimrodda/WizarDroid/master/license'
+						url 'https://raw.github.com/softvelopment/WizarDroid/develop/license'
 						distribution 'repo'
 					}
 				}
 
                 developers {
                     developer {
-                        id 'nimrodda'
-                        name 'Nimrod Dayan'
-                        email 'feedback@codepond.org'
+                        id 'softvelopment-automator'
+                        name 'Softvelopment Developer'
+                        email 'info@softvelopment.com'
                     }
                 }
 
                 organization {
-                    name 'CodePond.org'
-                    url 'http://www.codepond.org'
+                    name 'Softvelopment LLC'
+                    url 'http://www.softvelopment.com'
                 }
 
                 issueManagement {
                     system 'GitHub Issues'
-                    url 'https://github.com/nimrodda/wizardroid/issues'
+                    url 'https://github.com/softvelopment/wizardroid/issues'
                 }
                 
                 parent {
