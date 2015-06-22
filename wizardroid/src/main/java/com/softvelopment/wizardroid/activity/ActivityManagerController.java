@@ -64,7 +64,7 @@ public class ActivityManagerController {
 
 
 
-    protected void loadClassesMap(InputStream instream) throws IOException, XmlPullParserException {
+    public void loadClassesMap(InputStream instream) throws IOException, XmlPullParserException {
         try {
                            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(true);
