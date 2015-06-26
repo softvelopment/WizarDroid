@@ -48,10 +48,21 @@ public class ActivityManagerController {
 
     private Map<String, ActivityXmlBean> classes = null;
     private boolean isStarted = false;
+    private static ActivityManagerController _instance = null;
 
-    public  ActivityManagerController() {
+    private  ActivityManagerController() {
         classes = new Hashtable<String, ActivityXmlBean>();
 
+    }
+
+    public static synchronized ActivityManagerController getInstance()
+    {
+        if(_instance == null)
+        {
+            _instance = new ActivityManagerController();
+        }
+
+        return _instance;
     }
 
     public boolean isStarted() {

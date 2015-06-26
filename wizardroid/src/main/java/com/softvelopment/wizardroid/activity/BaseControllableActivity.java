@@ -19,7 +19,6 @@ public abstract class BaseControllableActivity extends Activity implements Contr
 
     public static final String DEFAULT_ACTIVITY_NAME = "baseActivity";
     private String when;
-    private ActivityManagerController activityManagerController;
 
     public BaseControllableActivity() {
         super();
@@ -47,7 +46,7 @@ public abstract class BaseControllableActivity extends Activity implements Contr
     }
 
     private void moveActivity(String direction, String when) {
-        ActivityXmlBean xmlBean = getActivityManagerController().deteremineNextActivityToRun(
+        ActivityXmlBean xmlBean = ActivityManagerController.getInstance().deteremineNextActivityToRun(
                 getActivityName(), direction, when);
         if (xmlBean != null) {
             if (!xmlBean.isActivityFragment()) {
@@ -87,11 +86,4 @@ public abstract class BaseControllableActivity extends Activity implements Contr
     public void onBackPressed() {
     }
 
-    public ActivityManagerController getActivityManagerController() {
-        return activityManagerController;
-    }
-
-    public void setActivityManagerController(ActivityManagerController activityManagerController) {
-        this.activityManagerController = activityManagerController;
-    }
 }

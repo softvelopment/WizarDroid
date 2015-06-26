@@ -27,7 +27,7 @@ public abstract class FormControllableActivity extends BaseControllableActivity 
         ActivityValidateResult result = new ActivityValidateResult();
         result.setIsValid(true);
 
-        ActivityXmlBean xmlBean = getActivityManagerController().getActivity(getActivityName());
+        ActivityXmlBean xmlBean = ActivityManagerController.getInstance().getActivity(getActivityName());
 
         if (xmlBean != null) {
             ActivityDirection direction = xmlBean.getActivity(ActivityConstants.MOVE_ACTIVITY_FORWARD, when);
