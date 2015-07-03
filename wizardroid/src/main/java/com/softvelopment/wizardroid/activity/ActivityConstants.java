@@ -14,6 +14,7 @@ public class ActivityConstants {
     public static final String ACTIVITY_NAME="activity";
     public static final String FRAGMENT_ACTIVITY_NAME="fragment-activity";
     public static final String UTF_8_ENCODING ="UTF-8";
+    public static final String REQUIRED = "required";
 }
 
 

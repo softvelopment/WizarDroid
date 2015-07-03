@@ -16,4 +16,8 @@ public interface WizardStepXmlBean {
 
     public void setClassName(String className);
     public String getClassName();
+
+    public  void setIsRequired(boolean required);
+    public boolean isRequired();
+
 }

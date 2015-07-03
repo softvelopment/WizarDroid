@@ -9,6 +9,7 @@ public class WizardStepXmlBeanImpl implements org.codepond.wizardroid.helper.Wiz
     private String id;
     private boolean hasPrevious;
     private String className;
+    private boolean required;
 
 
     @Override
@@ -49,5 +50,15 @@ public class WizardStepXmlBeanImpl implements org.codepond.wizardroid.helper.Wiz
     @Override
     public String getClassName() {
         return className;
+    }
+
+    @Override
+    public void setIsRequired(boolean required) {
+        this.required = required;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
     }
 }
