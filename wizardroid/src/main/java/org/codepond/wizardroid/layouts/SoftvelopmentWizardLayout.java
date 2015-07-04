@@ -1,11 +1,19 @@
 package org.codepond.wizardroid.layouts;
 
+import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.softvelopment.wizardroid.activity.ActivityConstants;
 
+import org.codepond.wizardroid.R;
 import org.codepond.wizardroid.WizardFlow;
 import org.codepond.wizardroid.WizardStep;
+import org.codepond.wizardroid.WizardValidatable;
 import org.codepond.wizardroid.helper.WizardStepXmlBean;
 import org.codepond.wizardroid.helper.WizardXmlBean;
 import org.codepond.wizardroid.helper.impl.WizardStepXmlBeanImpl;
@@ -32,12 +40,27 @@ import java.util.Collections;
  *  getWizardFileResourceId  The id of the wizard file resource
  *
  */
-public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout {
+public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implements WizardValidatable{
 
     private static final String TAG = SoftvelopmentWizardLayout.class.getSimpleName();
 
     public abstract String getWizardName();
     public abstract int getWizardFileResourceId();
+
+    protected int width=0;
+    protected int height=0;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View wizardLayout = super.onCreateView(inflater,container,savedInstanceState);
+        if((width > 0) &&(height >0 ))
+        {
+            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(width, height);
+            wizardLayout.setLayoutParams(p);
+            wizardLayout.requestLayout();
+        }
+        return wizardLayout;
+    }
 
     @Override
     public WizardFlow onSetup()
@@ -129,6 +152,17 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout {
         String tag = parser.getName();
         if ((tag.equalsIgnoreCase(ActivityConstants.WIZARD_NAME)) &&(wizardName.equalsIgnoreCase(parser.getAttributeValue(null, ActivityConstants.ID_NAME)))) {
             wizardXmlBean.setId(parser.getAttributeValue(null, ActivityConstants.ID_NAME));
+            try
+            {
+                wizardXmlBean.setHeight(parser.getAttributeValue(null, ActivityConstants.HEIGHT_NAME) == null ? 0 : Integer.parseInt(parser.getAttributeValue(null, ActivityConstants.HEIGHT_NAME)));
+                wizardXmlBean.setWidth(parser.getAttributeValue(null, ActivityConstants.WIDTH_NAME)==null?0:Integer.parseInt(parser.getAttributeValue(null, ActivityConstants.WIDTH_NAME)));
+                width = wizardXmlBean.getWidth();
+                height = wizardXmlBean.getHeight();
+            }
+            catch(NumberFormatException nfe)
+            {
+                Log.w(TAG, "unable to set dimensions for wizard " + wizardName + " using normal dimensions");
+            }
             Log.d(TAG, wizardName + " -" + parser.getName());
             while (parser.nextTag() != XmlPullParser.END_TAG) {
                 if (parser.getName()

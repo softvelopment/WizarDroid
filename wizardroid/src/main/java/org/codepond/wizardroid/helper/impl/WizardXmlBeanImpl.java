@@ -11,6 +11,8 @@ import org.codepond.wizardroid.helper.WizardXmlBean;
 public class WizardXmlBeanImpl implements WizardXmlBean {
     private String id;
     private WizardFlowXmlBean xmlWizardFlow = new WizardFlowXmlBeanImpl();
+    private int width;
+    private int height;
 
     @Override
     public void setWizardFlowXmlBean(WizardFlowXmlBean xmlBean) {
@@ -30,5 +32,25 @@ public class WizardXmlBeanImpl implements WizardXmlBean {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
     }
 }

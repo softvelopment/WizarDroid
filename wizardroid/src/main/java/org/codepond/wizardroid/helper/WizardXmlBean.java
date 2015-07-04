@@ -7,10 +7,19 @@ import java.io.Serializable;
 /**
  * Created by softvelopment on 5/6/15.
  */
-public interface WizardXmlBean extends Serializable{
-    public void setWizardFlowXmlBean(WizardFlowXmlBean xmlBean);
-    public WizardFlowXmlBean  getWizardFlowXmlBean();
+ public interface WizardXmlBean extends Serializable{
+     void setWizardFlowXmlBean(WizardFlowXmlBean xmlBean);
+     WizardFlowXmlBean  getWizardFlowXmlBean();
 
-    public void setId(String id);
-    public String getId();
+     void setId(String id);
+     String getId();
+
+    void setWidth(int width);
+    int getWidth();
+
+    void setHeight(int height);
+    int getHeight();
+    
+    
+    
 }
