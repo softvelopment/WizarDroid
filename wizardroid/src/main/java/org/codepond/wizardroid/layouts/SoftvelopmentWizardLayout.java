@@ -1,5 +1,6 @@
 package org.codepond.wizardroid.layouts;
 
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -127,15 +128,29 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implem
             factory.setNamespaceAware(true);
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(instream, ActivityConstants.UTF_8_ENCODING);
-            parser.nextTag();
-            return readWizardFromXML(wizardName, parser);
+
+            int eventType = parser.getEventType();
+
+            while (eventType != XmlResourceParser.END_DOCUMENT) {
+                if (eventType == XmlResourceParser.START_TAG) {
+                    if (parser.getName().equalsIgnoreCase(ActivityConstants.WIZARD_NAME))
+                    {
+                        if(wizardName.equalsIgnoreCase(parser.getAttributeValue(null, ActivityConstants.ID_NAME)))
+                        {
+                            return readWizardFromXML(wizardName, parser);
+                        }
+                    }
+                }
+                eventType = parser.next();
+                }
+            return null;
 
         } catch (IOException ioe) {
-            Log.e(TAG, "unable to load services from service controller", ioe);
+            Log.e(TAG, "unable to load wizard from wizard xml", ioe);
             throw ioe;
 
         } catch (XmlPullParserException xppe) {
-            Log.e(TAG, "unable to load services from service controller", xppe);
+            Log.e(TAG, "unable to load wizard from wizard xml", xppe);
             throw xppe;
         } finally {
             instream.close();
@@ -202,9 +217,8 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implem
             {
                 Log.w(TAG, "Unable to convert value " + parser.getAttributeValue(null, ActivityConstants.STEP_NAME) +"to a number", nfe);
             }
-
+            parser.nextTag();
         }
-        parser.require(XmlPullParser.END_TAG, null, ActivityConstants.FRAGMENT_ACTIVITY_NAME);
         return wizardStepXmlBean;
     }
 
