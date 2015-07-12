@@ -99,7 +99,7 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implem
                     for(WizardStepXmlBean stepXmlBean:wizardXmlBean.getWizardFlowXmlBean().getWizardSteps())
                     {
 
-                        wizardFlowBuilder.addStep((Class<? extends WizardStep>)Class.forName(stepXmlBean.getClassName()), stepXmlBean.isRequired());
+                        wizardFlowBuilder.addStep((Class<? extends WizardStep>)Class.forName(stepXmlBean.getClassName()));
 
                     }
                 }
