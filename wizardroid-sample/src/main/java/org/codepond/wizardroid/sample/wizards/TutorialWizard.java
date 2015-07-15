@@ -1,11 +1,16 @@
 package org.codepond.wizardroid.sample.wizards;
 
+import android.view.View;
+
+import com.softvelopment.wizardroid.activity.helper.ActivityValidateResult;
+
 import org.codepond.wizardroid.WizardFlow;
 import org.codepond.wizardroid.layouts.BasicWizardLayout;
+import org.codepond.wizardroid.layouts.SoftvelopmentWizardLayout;
 import org.codepond.wizardroid.sample.steps.TutorialStep1;
 import org.codepond.wizardroid.sample.steps.TutorialStep2;
 
-public class TutorialWizard extends BasicWizardLayout {
+public class TutorialWizard extends SoftvelopmentWizardLayout {
 
     /**
      * Note that we inherit from {@link android.support.v4.app.Fragment} and therefore must have an empty constructor
@@ -14,17 +19,16 @@ public class TutorialWizard extends BasicWizardLayout {
         super();
     }
 
-    /*
-        You must override this method and create a wizard flow by
-        using WizardFlow.Builder as shown in this example
-     */
     @Override
-    public WizardFlow onSetup() {
-        return new WizardFlow.Builder()
-                .addStep(TutorialStep1.class)           //Add your steps in the order you want them
-                .addStep(TutorialStep2.class)           //to appear and eventually call create()
-                .create();                              //to create the wizard flow.
+    public String getWizardName() {
+        return "tutorial_wizard";
     }
+
+    @Override
+    public int getWizardFileResourceId() {
+        return org.codepond.wizardroid.sample.R.raw.wizards;
+    }
+
 
     /*
         You'd normally override onWizardComplete to access the wizard context and/or close the wizard
@@ -34,4 +38,5 @@ public class TutorialWizard extends BasicWizardLayout {
         super.onWizardComplete();   //Make sure to first call the super method before anything else
         getActivity().finish();     //Terminate the wizard
     }
+
 }

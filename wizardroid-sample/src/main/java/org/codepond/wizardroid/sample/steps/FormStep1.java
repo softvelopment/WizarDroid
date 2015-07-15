@@ -1,15 +1,23 @@
 package org.codepond.wizardroid.sample.steps;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.softvelopment.wizardroid.activity.helper.ActivityValidateResult;
+
+import org.codepond.wizardroid.ValidatableWizardStep;
+import org.codepond.wizardroid.WizardStepValidatable;
 import org.codepond.wizardroid.persistence.ContextVariable;
 import org.codepond.wizardroid.WizardStep;
 import org.codepond.wizardroid.sample.R;
+import org.springframework.util.StringUtils;
 
-public class FormStep1 extends WizardStep {
+public class FormStep1 extends ValidatableWizardStep {
 
     /**
      * Tell WizarDroid that these are context variables.
@@ -53,6 +61,7 @@ public class FormStep1 extends WizardStep {
     public void onExit(int exitCode) {
         switch (exitCode) {
             case WizardStep.EXIT_NEXT:
+                super.onExit(exitCode);
                 bindDataFields();
                 break;
             case WizardStep.EXIT_PREVIOUS:
@@ -68,5 +77,26 @@ public class FormStep1 extends WizardStep {
         //and will be populated in the next steps only if the same field names are used.
         firstname = firstnameEt.getText().toString();
         lastname = lastnameEt.getText().toString();
+    }
+
+    @Override
+    public ActivityValidateResult validateWizardStep(View view) {
+        ActivityValidateResult result = new ActivityValidateResult();
+        result.setIsValid(true);
+        if(!StringUtils.hasText(firstnameEt.getText()))
+        {
+            result.setIsValid(false);
+        }
+
+        return result;
+    }
+
+    @Override
+    public void bindFormErrors(View view,ActivityValidateResult result) {
+        if(!result.isValid())
+        {
+            firstnameEt.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+        }
+
     }
 }

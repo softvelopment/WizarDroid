@@ -1,23 +1,28 @@
 package org.codepond.wizardroid.helper;
 
+import java.util.Map;
+
 /**
  * Created by softvelopment on 5/7/15.
  */
 public interface WizardStepXmlBean {
 
-    public void setStepNumber(int stepNumber);
-    public int getStepNumber();
+    void setStepNumber(int stepNumber);
+    int getStepNumber();
 
-    public void setHasPreviousControl(boolean hasPreviousControl);
-    public boolean hasPreviousControl();
+    void setHasPreviousControl(boolean hasPreviousControl);
+    boolean hasPreviousControl();
 
-    public String getId();
-    public void setId(String id);
+    String getId();
+    void setId(String id);
 
-    public void setClassName(String className);
-    public String getClassName();
+    void setClassName(String className);
+    String getClassName();
 
-    public  void setIsRequired(boolean required);
-    public boolean isRequired();
+     void setIsRequired(boolean required);
+    boolean isRequired();
+
+    Map<String, String> getRequiredFields();
+    void setRequiredFields(Map<String, String> fields);
 
 }

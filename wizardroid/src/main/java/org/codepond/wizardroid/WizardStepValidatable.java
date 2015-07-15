@@ -8,6 +8,7 @@ import com.softvelopment.wizardroid.activity.helper.ActivityValidateResult;
 /**
  * Created by softvelopment on 7/3/15.
  */
-public interface WizardValidatable {
-     public ActivityValidateResult validateWizardStep(View view);
+public interface WizardStepValidatable {
+    ActivityValidateResult validateWizardStep(View view);
+     void bindFormErrors(View view,ActivityValidateResult result);
 }

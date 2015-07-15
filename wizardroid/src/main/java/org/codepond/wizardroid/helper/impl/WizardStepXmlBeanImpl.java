@@ -1,5 +1,8 @@
 package org.codepond.wizardroid.helper.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by softvelopment on 5/7/15.
  */
@@ -10,6 +13,7 @@ public class WizardStepXmlBeanImpl implements org.codepond.wizardroid.helper.Wiz
     private boolean hasPrevious;
     private String className;
     private boolean required;
+    private Map<String, String> requiredFields = new HashMap<String, String>();
 
 
     @Override
@@ -60,5 +64,15 @@ public class WizardStepXmlBeanImpl implements org.codepond.wizardroid.helper.Wiz
     @Override
     public boolean isRequired() {
         return required;
+    }
+
+    @Override
+    public Map<String, String> getRequiredFields() {
+        return requiredFields;
+    }
+
+    @Override
+    public void setRequiredFields(Map<String, String> fields) {
+        requiredFields = fields;
     }
 }

@@ -17,6 +17,7 @@ public class ActivityConstants {
     public static final String HEIGHT_NAME= "height";
     public static final String UTF_8_ENCODING ="UTF-8";
     public static final String REQUIRED = "required";
+    public static final String REQUIRED_FIELDS = "requiredFields";
 }
 
 

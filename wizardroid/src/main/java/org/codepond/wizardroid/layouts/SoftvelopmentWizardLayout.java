@@ -6,15 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.softvelopment.wizardroid.activity.ActivityConstants;
+import com.softvelopment.wizardroid.activity.helper.ActivityValidateResult;
 
 import org.codepond.wizardroid.R;
+import org.codepond.wizardroid.ValidatableWizard;
 import org.codepond.wizardroid.WizardFlow;
 import org.codepond.wizardroid.WizardStep;
-import org.codepond.wizardroid.WizardValidatable;
+import org.codepond.wizardroid.WizardStepValidatable;
 import org.codepond.wizardroid.helper.WizardStepXmlBean;
 import org.codepond.wizardroid.helper.WizardXmlBean;
 import org.codepond.wizardroid.helper.impl.WizardStepXmlBeanImpl;
@@ -27,6 +28,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by softvelopment on 7/3/15.
@@ -41,7 +44,7 @@ import java.util.Collections;
  *  getWizardFileResourceId  The id of the wizard file resource
  *
  */
-public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implements WizardValidatable{
+public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implements ValidatableWizard {
 
     private static final String TAG = SoftvelopmentWizardLayout.class.getSimpleName();
 
@@ -61,6 +64,37 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implem
             wizardLayout.requestLayout();
         }
         return wizardLayout;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.wizard_next_button) {
+            WizardStep wizardStep = wizard.getCurrentStep();
+            if(wizardStep instanceof WizardStepValidatable)
+            {
+                //validate before going next
+                WizardStepValidatable validatableWizardStep = ( WizardStepValidatable)wizardStep;
+                ActivityValidateResult validationResult = validatableWizardStep.validateWizardStep(getView());
+                if(validationResult.isValid())
+                {
+                    //validated now we can go next
+                    wizard.goNext();
+                }
+                else
+                {
+                    //just bind the errors
+                    validatableWizardStep.bindFormErrors(getView(), validationResult);
+                }
+            }
+            else {
+                //Tell the wizard to go to next step
+                wizard.goNext();
+            }
+        }
+        else if (v.getId() == R.id.wizard_previous_button) {
+            //Tell the wizard to go back one step
+            wizard.goBack();
+        }
     }
 
     @Override
@@ -208,6 +242,11 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implem
                 bRequired = false;
             }
             wizardStepXmlBean.setIsRequired(bRequired);
+            String requiredFields =parser.getAttributeValue(null, ActivityConstants.REQUIRED_FIELDS);
+            if((requiredFields != null) &&(requiredFields.length()>0))
+            {
+                wizardStepXmlBean.setRequiredFields(findRequiredFieldsFromAttrString(requiredFields));
+            }
             try
             {
                 wizardStepXmlBean.setStepNumber(Integer.parseInt(parser.getAttributeValue(null, ActivityConstants.STEP_NAME)));
@@ -239,5 +278,20 @@ public abstract class SoftvelopmentWizardLayout extends BasicWizardLayout implem
                     break;
             }
         }
+    }
+
+    private Map<String, String> findRequiredFieldsFromAttrString(String requiredFieldsString)
+    {
+        Map<String, String> resultMap = new HashMap<String, String>();
+        String [] requiredFieldsList = requiredFieldsString.split(",");
+        for(String requiredField : requiredFieldsList)
+        {
+            String [] requiredFieldInfo = requiredField.split(":");
+            if(requiredFieldInfo.length ==2 )
+            {
+                resultMap.put(requiredFieldInfo[0],requiredFieldInfo[1]);
+            }
+        }
+        return resultMap;
     }
 }
