@@ -44,6 +44,7 @@ public class ActivityManagerController {
     private static final String IS_FRAGMENT_ATTRIBUTE_NAME = "isFragment";
     private static final String YES_VALUE = "yes";
     public static final String WILDCARD_CHAR = "*";
+    public static final String ACTIVITY_MANAGER_CONTROLLER_FILENAME_KEY ="controller_filename";
 
 
     private Map<String, ActivityXmlBean> classes = null;
@@ -228,8 +229,8 @@ public class ActivityManagerController {
         return null;
     }
 
-    public static class Builder {
-
-
-    }
+   public Map<String, ActivityXmlBean> getClasses()
+   {
+       return classes;
+   }
 }

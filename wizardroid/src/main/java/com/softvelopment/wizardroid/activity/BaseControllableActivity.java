@@ -5,9 +5,17 @@
 package com.softvelopment.wizardroid.activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
 import com.softvelopment.wizardroid.activity.helper.ActivityXmlBean;
 import com.softvelopment.wizardroid.activity.ActivityManagerController;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +32,21 @@ public abstract class BaseControllableActivity extends Activity implements Contr
         super();
         this.promoteToCurrentBean();
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int controllerFileKey = savedInstanceState.getInt(ActivityManagerController.ACTIVITY_MANAGER_CONTROLLER_FILENAME_KEY);
+        if( controllerFileKey >0)
+        {
+            if(ActivityManagerController.getInstance().getClasses() == null)
+            {
+              loadActivityManagerController(controllerFileKey);
+            }
+
+        }
+    }
+
 
     public String getSceneName() {
         return getClass().getName();
@@ -58,11 +81,7 @@ public abstract class BaseControllableActivity extends Activity implements Contr
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to move forward fron " + this.getClass().getName() + "  when " + when, cfe);
                 }
             }// close out (if... Fragment)
-            else
-            {
-                //keep current activity but swtich to fragment
-                
-            }
+
         }
     }
 
@@ -84,6 +103,23 @@ public abstract class BaseControllableActivity extends Activity implements Contr
     
     @Override
     public void onBackPressed() {
+    }
+
+    private void loadActivityManagerController(int controllerResourceId)
+    {
+        try {
+            //automatically load the activity for the resournces
+            ActivityManagerController.getInstance().loadClassesMap(getResources().openRawResource(controllerResourceId));
+        }
+
+        catch(XmlPullParserException xppe)
+        {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to parse controller.xml.  The App will be unuseable", xppe);
+        }
+        catch(IOException ioe)
+        {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "IoException reading controller.xml", ioe);
+        }
     }
 
 }
