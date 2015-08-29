@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author softvelopment
  */
 public abstract class BaseControllableActivity extends Activity implements ControllableActivity {
@@ -36,14 +35,14 @@ public abstract class BaseControllableActivity extends Activity implements Contr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int controllerFileKey = savedInstanceState.getInt(ActivityManagerController.ACTIVITY_MANAGER_CONTROLLER_FILENAME_KEY);
-        if( controllerFileKey >0)
-        {
-            if(ActivityManagerController.getInstance().getClasses() == null)
-            {
-              loadActivityManagerController(controllerFileKey);
-            }
+        if (savedInstanceState != null) {
+            int controllerFileKey = savedInstanceState.getInt(ActivityManagerController.ACTIVITY_MANAGER_CONTROLLER_FILENAME_KEY);
+            if (controllerFileKey > 0) {
+                if (ActivityManagerController.getInstance().getClasses() == null) {
+                    loadActivityManagerController(controllerFileKey);
+                }
 
+            }
         }
     }
 
@@ -100,24 +99,18 @@ public abstract class BaseControllableActivity extends Activity implements Contr
     * default we dont want the back button used
     *  @See http://stackoverflow.com/questions/4779954/disable-back-button-in-android
     */
-    
+
     @Override
     public void onBackPressed() {
     }
 
-    private void loadActivityManagerController(int controllerResourceId)
-    {
+    private void loadActivityManagerController(int controllerResourceId) {
         try {
             //automatically load the activity for the resournces
             ActivityManagerController.getInstance().loadClassesMap(getResources().openRawResource(controllerResourceId));
-        }
-
-        catch(XmlPullParserException xppe)
-        {
+        } catch (XmlPullParserException xppe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Unable to parse controller.xml.  The App will be unuseable", xppe);
-        }
-        catch(IOException ioe)
-        {
+        } catch (IOException ioe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "IoException reading controller.xml", ioe);
         }
     }
