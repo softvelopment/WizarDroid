@@ -41,7 +41,6 @@ public abstract class BaseControllableActivity extends Activity implements Contr
                 if (ActivityManagerController.getInstance().getClasses() == null) {
                     loadActivityManagerController(controllerFileKey);
                 }
-
             }
         }
     }
