@@ -43,8 +43,9 @@ public abstract class BaseControllableActivity extends Activity implements Contr
             }
 
             //use this as an entry point for saveforlater loadable function
-            loadSaveForLaterData();
+
         }
+        loadSaveForLaterData();
     }
 
 
