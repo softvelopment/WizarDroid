@@ -23,7 +23,7 @@ public abstract class BaseControllableActivity extends Activity implements Contr
 
     public static final String DEFAULT_ACTIVITY_NAME = "baseActivity";
     private String when;
-    Intent intent =new Intent();
+    Intent intent = new Intent();
 
     public BaseControllableActivity() {
         super();
@@ -41,10 +41,8 @@ public abstract class BaseControllableActivity extends Activity implements Contr
                     loadActivityManagerController(controllerFileKey);
                 }
             }
-
-            //use this as an entry point for saveforlater loadable function
-
         }
+        //use this as an entry point for saveforlater loadable function
         loadSaveForLaterData();
     }
 
@@ -122,14 +120,12 @@ public abstract class BaseControllableActivity extends Activity implements Contr
     }
 
     @Override
-    public void saveForLater()
-    {
+    public void saveForLater() {
 
     }
 
     @Override
-    public void loadSaveForLaterData()
-    {
+    public void loadSaveForLaterData() {
 
     }
 
