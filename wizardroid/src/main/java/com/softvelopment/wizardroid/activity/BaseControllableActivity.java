@@ -5,13 +5,10 @@
 package com.softvelopment.wizardroid.activity;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.softvelopment.wizardroid.activity.helper.ActivityXmlBean;
-import com.softvelopment.wizardroid.activity.ActivityManagerController;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -22,10 +19,11 @@ import java.util.logging.Logger;
 /**
  * @author softvelopment
  */
-public abstract class BaseControllableActivity extends Activity implements ControllableActivity {
+public abstract class BaseControllableActivity extends Activity implements ControllableActivity, ActivitySaveForLaterSaveable, ActivitySaveForLaterLoadable {
 
     public static final String DEFAULT_ACTIVITY_NAME = "baseActivity";
     private String when;
+    Intent intent =new Intent();
 
     public BaseControllableActivity() {
         super();
@@ -37,11 +35,15 @@ public abstract class BaseControllableActivity extends Activity implements Contr
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             int controllerFileKey = savedInstanceState.getInt(ActivityManagerController.ACTIVITY_MANAGER_CONTROLLER_FILENAME_KEY);
+            //default load activity manager controller since that is the heart of this controllable thing
             if (controllerFileKey > 0) {
                 if (ActivityManagerController.getInstance().getClasses() == null) {
                     loadActivityManagerController(controllerFileKey);
                 }
             }
+
+            //use this as an entry point for saveforlater loadable function
+            loadSaveForLaterData();
         }
     }
 
@@ -71,9 +73,13 @@ public abstract class BaseControllableActivity extends Activity implements Contr
                 getActivityName(), direction, when);
         if (xmlBean != null) {
             if (!xmlBean.isActivityFragment()) {
+
+                //save for later if need be
+                saveForLater();
+
                 try {
                     Class<?> clazz = Class.forName(xmlBean.getClassName());
-                    Intent intent = new Intent(this, clazz);
+                    intent.setClass(this, clazz);
                     startActivity(intent);
                 } catch (ClassNotFoundException cfe) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to move forward fron " + this.getClass().getName() + "  when " + when, cfe);
@@ -112,6 +118,18 @@ public abstract class BaseControllableActivity extends Activity implements Contr
         } catch (IOException ioe) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "IoException reading controller.xml", ioe);
         }
+    }
+
+    @Override
+    public void saveForLater()
+    {
+
+    }
+
+    @Override
+    public void loadSaveForLaterData()
+    {
+
     }
 
 }
